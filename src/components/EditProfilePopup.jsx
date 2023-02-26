@@ -5,8 +5,7 @@ import { useForm } from "../hooks/useForm";
 
 export const EditProfilePopup = ({isOpen, onClose, onUpdateUser}) => {
 
-
-    const currentUser = useContext(CurrentUserContext);
+    const { currentUser } = useContext(CurrentUserContext);
 
     const {values, handleChange, setValues} = useForm({name:'', about:''});
 
@@ -40,7 +39,7 @@ export const EditProfilePopup = ({isOpen, onClose, onUpdateUser}) => {
           minLength="2"
           maxLength="40"
           required
-          value={values.name}
+          value={values.name || ''}
           onChange={handleChange}
         />
         <span
@@ -58,7 +57,7 @@ export const EditProfilePopup = ({isOpen, onClose, onUpdateUser}) => {
           minLength="2"
           maxLength="200"
           required
-          value={values.about}
+          value={values.about || ''}
           onChange={handleChange}
         />
         <span

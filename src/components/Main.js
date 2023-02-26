@@ -6,7 +6,7 @@ import icon from '../images/edit-icon.png';
 
 export const Main = (props) => {
 
-  const currentUser = useContext(CurrentUserContext);
+  const { currentUser } = useContext(CurrentUserContext);
 
   return (
     <main className="page">

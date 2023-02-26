@@ -3,23 +3,34 @@ import { Header } from './Header';
 import { Main } from './Main'
 import { Footer } from './Footer';
 import { ImagePopup } from './ImagePopup';
-import { CurrentUserContext } from '../context/CurrentUserContext';
 import Api from '../utils/Api';
 import { EditProfilePopup } from './EditProfilePopup';
 import { EditAvatarPopup } from './EditAvatarPopup';
 import { AddPlacePopup } from './AddPlacePopup';
+import { Route, Routes, useNavigate } from 'react-router-dom';
+import { ProtectedRoute } from '../HOC/ProtectedRoute';
+import { Login } from './Login/Login';
+import { Register } from './Register/Register';
+import { InfoTooltip } from './InfoTooltip/InfoTooltip';
+import { UseCurrentUserContext } from '../context/CurrentUserContext';
+
 
 
 function App() {
+
+  const { token, setToken, email, setEmail, currentUser, setCurrentUser } = UseCurrentUserContext()
 
   const [selectedCard, setSelectedCard] = useState(null);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isNewCardPopupOpen, setIsNewCardPopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+  const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false)
+  const [isInfoTooltipStateError, setIsInfoTooltipStateError] = useState(false)
   // const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
 
-  const [currentUser, setCurrentUser] = useState({ name: '', about: '', avatar: '' })
   const [cards, setCards] = useState([]);
+
+  const navigate = useNavigate();
 
   const closeAllPopups = () => {
     setSelectedCard(null);
@@ -27,13 +38,14 @@ function App() {
     setIsNewCardPopupOpen(false);
     setIsEditAvatarPopupOpen(false);
     // setIsDeletePopupOpen(false);
+    setIsInfoTooltipOpen(false);
   };
 
   useEffect(() => {
     Api.getProfile()
       .then(user => setCurrentUser(user))
       .catch(err => console.error(err.message))
-  }, [])
+  }, [token, setCurrentUser])
 
   useEffect(() => {
     Api.getInitialCards().then((cards) => {
@@ -88,22 +100,74 @@ function App() {
       .catch((err) => console.error(err.message));
   };
 
+  const handleSignIn = ({ isOk, email, token }) => {
+    if (isOk) {
+      setToken(token)
+      setEmail(email)
+      navigate('/')
+    }
+    else {
+      setIsInfoTooltipStateError(true)
+      setIsInfoTooltipOpen(true)
+    }
+  }
 
+  const handleSignUp = ({ isOk }) => {
+    setIsInfoTooltipStateError(!isOk)
+    setIsInfoTooltipOpen(true)
+  }
+
+  const handleSignOut = () => {
+    setToken('')
+  }
+
+  // return (<div>123</div>)
 
   return (
-    <CurrentUserContext.Provider value={currentUser}>
+    <>
       <div className="body">
-        <Header />
-        <Main
-          onCardClick={(card) => setSelectedCard(card)}
-          onEditAvatar={() => setIsEditAvatarPopupOpen(true)}
-          onAddPlace={() => setIsNewCardPopupOpen(true)}
-          onEditProfile={() => setIsEditProfilePopupOpen(true)}
-          onCardLike={handleCardLike}
-          onCardDelete={handleCardDelete}
-          cards={cards}
+        <Header
+          isLoggedIn={!!token}
+          email={email}
+          onSignOut={handleSignOut}
         />
-        <Footer />
+        <Routes>
+          <Route
+            path="/sign-up"
+            element={
+              <Register
+                onRegister={handleSignUp}
+              />
+            }
+          />
+
+          <Route
+            path="/sign-in"
+            element={
+              <Login
+                onLogin={handleSignIn}
+              />
+            }
+          />
+
+          <Route
+            path='/'
+            element={
+              <ProtectedRoute
+                onCardClick={(card) => setSelectedCard(card)}
+                onEditAvatar={() => setIsEditAvatarPopupOpen(true)}
+                onAddPlace={() => setIsNewCardPopupOpen(true)}
+                onEditProfile={() => setIsEditProfilePopupOpen(true)}
+                onCardLike={handleCardLike}
+                onCardDelete={handleCardDelete}
+                cards={cards}
+                element={Main}
+                isLoggedIn={!!token}
+              />}
+          />
+
+        </Routes>
+        {<Footer />}
       </div>
 
       <ImagePopup
@@ -130,13 +194,15 @@ function App() {
         onUpdateAvatar={handleUpdateAvatar}
       />
 
-      {/* <PopupWithForm
-        isOpen={isDeletePopupOpen}
-        // onSubmit={handleCardDelete}
-        onClose={closeAllPopups}
-      /> */}
-    </CurrentUserContext.Provider>
+      <InfoTooltip
+        isOpen={isInfoTooltipOpen}
+        isError={isInfoTooltipStateError}
+        onClose={() => closeAllPopups()}
+        name="info"
+      />
+    </>
   )
 }
 
 export default App;
+

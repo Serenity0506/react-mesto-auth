@@ -3,8 +3,6 @@ class Api {
         this.options = options;
     }
 
-    // CARDS
-
     async getInitialCards() {
         const resp = await fetch(this.options.baseUrl + '/cards', {
             headers: { 'Authorization': this.options.headers['Authorization'] }

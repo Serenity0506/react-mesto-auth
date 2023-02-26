@@ -1,4 +1,7 @@
 .header {
+    display: grid;
+    grid-template-columns: auto min-content min-content;
+    column-gap: 24px;
     margin: 0 auto;
     padding-top: 45px;
     max-width: 880px;

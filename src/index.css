@@ -48,4 +48,17 @@
 @import url(./blocks/popup/__input-error/_active/popup__input-error_active.css);
 
 
-@import url(./blocks/footer/footer.css)
+@import url(./blocks/footer/footer.css);
+
+@import url(./blocks/sign/sign.css);
+@import url(./blocks/sign/sign__button.css);
+@import url(./blocks/sign/sign__header.css);
+@import url(./blocks/sign/sign__button-subtitle.css);
+@import url(./blocks/sign/sign__container.css);
+@import url(./blocks/popup/__form/_inner/popup__form_inner.css);
+@import url(./blocks/popup/__form/_inner/popup__form_inner-img.css);
+
+
+@import url(./blocks/header/email/header__email.css);
+@import url(./blocks/header/link/header__link.css);
+@import url(./blocks/sign/sign__input.css);
