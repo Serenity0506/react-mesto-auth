@@ -1,53 +1,56 @@
-import { NavLink } from 'react-router-dom';
-import { useRef } from 'react';
-import ApiAuth from '../../utils/ApiAuth';
+import { NavLink } from "react-router-dom"
+import { useForm } from "../../hooks/useForm"
+import ApiAuth from "../../utils/ApiAuth"
 
 export const Register = ({ onRegister }) => {
-    const emailRef = useRef()
-    const pwdRef = useRef()
+  const { values, handleChange } = useForm({
+    email: "",
+    password: "",
+  })
 
-    function handleRegister() {
-        ApiAuth.signUp(emailRef.current.value, pwdRef.current.value)
-        .then(data => {
-            console.log(data)
-            onRegister({
-                isOk: true,
-            })
-        })
-        .catch(error => {
-            onRegister({
-                isOk: false,
-                error
-            })
-        })
-    }
+  function handleRegister(evt) {
+    evt.preventDefault()
 
-    return (
-        <>
-        <div className='sign__container'>
-            <h1 className='sign__header'>Регистрация</h1>
-            <input 
-                className='sign__input' 
-                placeholder='Email'
-                type='email'
-                required
-                ref={emailRef}
-            ></input>
-            <input
-                className='sign__input' 
-                placeholder='Пароль'
-                type='password'
-                required
-                ref={pwdRef}
-                ></input>
-            <button 
-                className='sign__button'
-                onClick={() => handleRegister()}
-            >Зарегистрироваться</button>
-            <NavLink to='/sign-in' className='sign__button-subtitle'>
-                <span>Уже зарегистрированы? Войти</span>
-            </NavLink>
-        </div>
-        </>
-    )
+    ApiAuth.signUp(values.email, values.password)
+      .then((data) => {
+        console.log(data)
+        onRegister({
+          isOk: true,
+        })
+      })
+      .catch((error) => {
+        onRegister({
+          isOk: false,
+          error,
+        })
+      })
+  }
+
+  return (
+    <form className='sign__container' name='register' onSubmit={handleRegister}>
+      <h1 className='sign__header'>Регистрация</h1>
+      <input
+        className='sign__input'
+        placeholder='Email'
+        type='email'
+        required
+        name='email'
+        onChange={handleChange}
+      ></input>
+      <input
+        className='sign__input'
+        placeholder='Пароль'
+        type='password'
+        required
+        name='password'
+        onChange={handleChange}
+      ></input>
+      <button type='submit' className='sign__button'>
+        Зарегистрироваться
+      </button>
+      <NavLink to='/sign-in' className='sign__button-subtitle'>
+        <span>Уже зарегистрированы? Войти</span>
+      </NavLink>
+    </form>
+  )
 }
