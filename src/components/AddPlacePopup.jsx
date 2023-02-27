@@ -19,7 +19,6 @@ export const AddPlacePopup = ({ onAddCard, isOpen, onClose }) => {
       title='Новое место'
     >
       <input
-        id='name'
         type='text'
         name='name'
         className='popup__input'
@@ -34,7 +33,6 @@ export const AddPlacePopup = ({ onAddCard, isOpen, onClose }) => {
         Вы пропустили это поле.
       </span>
       <input
-        id='link'
         type='url'
         name='link'
         className='popup__input'

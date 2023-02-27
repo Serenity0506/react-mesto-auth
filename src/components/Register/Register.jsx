@@ -36,6 +36,7 @@ export const Register = ({ onRegister }) => {
         required
         name='email'
         onChange={handleChange}
+        value={values.email}
       ></input>
       <input
         className='sign__input'
@@ -44,6 +45,7 @@ export const Register = ({ onRegister }) => {
         required
         name='password'
         onChange={handleChange}
+        value={values.password}
       ></input>
       <button type='submit' className='sign__button'>
         Зарегистрироваться

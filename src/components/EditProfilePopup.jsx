@@ -30,7 +30,6 @@ export const EditProfilePopup = ({ isOpen, onClose, onUpdateUser }) => {
       title='Редактировать профиль'
     >
       <input
-        id='name'
         type='text'
         name='name'
         className='popup__input'
@@ -45,7 +44,6 @@ export const EditProfilePopup = ({ isOpen, onClose, onUpdateUser }) => {
         Вы пропустили это поле.
       </span>
       <input
-        id='about'
         type='text'
         name='about'
         className='popup__input'

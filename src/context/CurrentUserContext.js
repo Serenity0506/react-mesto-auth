@@ -9,7 +9,10 @@ export function AppContextProvider({ children }) {
     return tokenFromLS || ""
   })
 
-  const [email, setEmail] = useState("")
+  const [email, setEmail] = useState(() => {
+    const emailFromLS = localStorage.getItem("email")
+    return emailFromLS || ""
+  })
 
   const [currentUser, setCurrentUser] = useState({
     name: "",
@@ -20,6 +23,10 @@ export function AppContextProvider({ children }) {
   useEffect(() => {
     localStorage.setItem("token", token)
   }, [token])
+
+  useEffect(() => {
+    localStorage.setItem("email", email)
+  }, [email])
 
   return (
     <CurrentUserContext.Provider
